@@ -1,0 +1,25 @@
+POST http://localhost:3000/games/import
+Content-Type: application/json
+
+{
+  "title": "Game Night Jeopardy",
+  "rounds": [
+    {
+      "name": "Jeopardy Round",
+      "categories": [
+        {
+          "name": "Movies",
+          "clues": [
+            {
+              "question": "What is my dog's name",
+              "correctAnswer": "Gatsby",
+              "acceptableAnswers": ["Gappy", "Gappy Bappy"],
+              "basePoints": 100,
+              "timeLimitSeconds": 20
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

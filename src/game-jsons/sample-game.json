@@ -1,0 +1,29 @@
+{
+  "title": "Game Night Jeopardy",
+  "rounds": [
+    {
+      "name": "Jeopardy Round",
+      "categories": [
+        {
+          "name": "Movies",
+          "clues": [
+            {
+              "question": "This 1993 dinosaur movie was directed by Steven Spielberg.",
+              "correctAnswer": "Jurassic Park",
+              "acceptableAnswers": ["jurassic park"],
+              "basePoints": 100,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This actor played Jack in Titanic.",
+              "correctAnswer": "Leonardo DiCaprio",
+              "acceptableAnswers": ["leonardo dicaprio", "leo", "dicaprio"],
+              "basePoints": 200,
+              "timeLimitSeconds": 20
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
