@@ -1,11 +1,6 @@
 import { db } from "./database.js";
-
-type TableInfoRow = {
-  name: string;
-};
-
 export function createSchema() {
-  db.exec(`
+    db.exec(`
     CREATE TABLE IF NOT EXISTS Game (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
@@ -77,17 +72,14 @@ export function createSchema() {
       FOREIGN KEY (clueId) REFERENCES Clue(id) ON DELETE SET NULL
     );
   `);
-
-  const clueColumns = db.prepare<[], TableInfoRow>(`
+    const clueColumns = db.prepare(`
     PRAGMA table_info(Clue)
   `).all();
-
-  const hasIsAnsweredColumn = clueColumns.some(column => column.name === "isAnswered");
-
-  if (!hasIsAnsweredColumn) {
-    db.exec(`
+    const hasIsAnsweredColumn = clueColumns.some(column => column.name === "isAnswered");
+    if (!hasIsAnsweredColumn) {
+        db.exec(`
       ALTER TABLE Clue
       ADD COLUMN isAnswered INTEGER NOT NULL DEFAULT 0
     `);
-  }
+    }
 }

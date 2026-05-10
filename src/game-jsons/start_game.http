@@ -1,0 +1,253 @@
+POST http://localhost:3000/api/games/import
+Content-Type: application/json
+
+{
+  "title": "Game Night Jeopardy",
+  "rounds": [
+    {
+      "name": "Jeopardy Round",
+      "categories": [
+        {
+          "name": "Greek Mythology",
+          "clues": [
+            {
+              "question": "He is the king of the Greek gods.",
+              "correctAnswer": "Zeus",
+              "acceptableAnswers": ["zeus"],
+              "basePoints": 100,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This god rules the sea.",
+              "correctAnswer": "Poseidon",
+              "acceptableAnswers": ["poseidon"],
+              "basePoints": 200,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This is the name of the Greek underworld.",
+              "correctAnswer": "Hades",
+              "acceptableAnswers": ["hades"],
+              "basePoints": 300,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "He flew too close to the sun with wax wings.",
+              "correctAnswer": "Icarus",
+              "acceptableAnswers": ["icarus"],
+              "basePoints": 400,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This hero completed twelve famous labors.",
+              "correctAnswer": "Hercules",
+              "acceptableAnswers": ["hercules", "heracles"],
+              "basePoints": 500,
+              "timeLimitSeconds": 20
+            }
+          ]
+        },
+        {
+          "name": "Dogs",
+          "clues": [
+            {
+              "question": "This spotted breed is often associated with firehouses.",
+              "correctAnswer": "Dalmatian",
+              "acceptableAnswers": ["dalmatian"],
+              "basePoints": 100,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This is the smallest dog breed.",
+              "correctAnswer": "Chihuahua",
+              "acceptableAnswers": ["chihuahua"],
+              "basePoints": 200,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This intelligent breed is commonly used as a police dog.",
+              "correctAnswer": "German Shepherd",
+              "acceptableAnswers": ["german shepherd", "shepherd"],
+              "basePoints": 300,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This breed is known for pulling sleds in snowy regions.",
+              "correctAnswer": "Husky",
+              "acceptableAnswers": ["husky", "siberian husky"],
+              "basePoints": 400,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This wrinkled breed has a pushed-in nose.",
+              "correctAnswer": "Bulldog",
+              "acceptableAnswers": ["bulldog"],
+              "basePoints": 500,
+              "timeLimitSeconds": 20
+            }
+          ]
+        },
+        {
+          "name": "Ocean",
+          "clues": [
+            {
+              "question": "This is the largest ocean on Earth.",
+              "correctAnswer": "Pacific Ocean",
+              "acceptableAnswers": ["pacific", "pacific ocean"],
+              "basePoints": 100,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "Animals that live on the ocean floor are called this.",
+              "correctAnswer": "Benthos",
+              "acceptableAnswers": ["benthos"],
+              "basePoints": 200,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This sea creature has eight arms.",
+              "correctAnswer": "Octopus",
+              "acceptableAnswers": ["octopus"],
+              "basePoints": 300,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This is the deepest part of the ocean.",
+              "correctAnswer": "Mariana Trench",
+              "acceptableAnswers": ["mariana trench"],
+              "basePoints": 400,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "Coral reefs are built from this material secreted by corals.",
+              "correctAnswer": "Calcium carbonate",
+              "acceptableAnswers": ["calcium carbonate"],
+              "basePoints": 500,
+              "timeLimitSeconds": 20
+            }
+          ]
+        },
+        {
+          "name": "Books",
+          "clues": [
+            {
+              "question": "She wrote the Harry Potter series.",
+              "correctAnswer": "J.K. Rowling",
+              "acceptableAnswers": ["jk rowling", "j k rowling", "rowling"],
+              "basePoints": 100,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This is the first book in The Hunger Games series.",
+              "correctAnswer": "The Hunger Games",
+              "acceptableAnswers": ["the hunger games", "hunger games"],
+              "basePoints": 200,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "She wrote Pride and Prejudice.",
+              "correctAnswer": "Jane Austen",
+              "acceptableAnswers": ["jane austen", "austen"],
+              "basePoints": 300,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This novel features Atticus Finch.",
+              "correctAnswer": "To Kill a Mockingbird",
+              "acceptableAnswers": ["to kill a mockingbird", "mockingbird"],
+              "basePoints": 400,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This author wrote 1984.",
+              "correctAnswer": "George Orwell",
+              "acceptableAnswers": ["george orwell", "orwell"],
+              "basePoints": 500,
+              "timeLimitSeconds": 20
+            }
+          ]
+        },
+        {
+          "name": "Hockey",
+          "clues": [
+            {
+              "question": "This is the number of players per team on the ice including the goalie.",
+              "correctAnswer": "6",
+              "acceptableAnswers": ["6", "six"],
+              "basePoints": 100,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "Scoring three goals in a game is called this.",
+              "correctAnswer": "Hat trick",
+              "acceptableAnswers": ["hat trick", "hattrick"],
+              "basePoints": 200,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This country is considered the birthplace of hockey.",
+              "correctAnswer": "Canada",
+              "acceptableAnswers": ["canada"],
+              "basePoints": 300,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This is the championship trophy of the NHL.",
+              "correctAnswer": "Stanley Cup",
+              "acceptableAnswers": ["stanley cup"],
+              "basePoints": 400,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This player position defends the goal.",
+              "correctAnswer": "Goalie",
+              "acceptableAnswers": ["goalie", "goaltender"],
+              "basePoints": 500,
+              "timeLimitSeconds": 20
+            }
+          ]
+        },
+        {
+          "name": "Pop Culture",
+          "clues": [
+            {
+              "question": "He is the alter ego of Spider-Man.",
+              "correctAnswer": "Peter Parker",
+              "acceptableAnswers": ["peter parker"],
+              "basePoints": 100,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This streaming service released Stranger Things.",
+              "correctAnswer": "Netflix",
+              "acceptableAnswers": ["netflix"],
+              "basePoints": 200,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "She sang Shake It Off.",
+              "correctAnswer": "Taylor Swift",
+              "acceptableAnswers": ["taylor swift", "swift"],
+              "basePoints": 300,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This Marvel movie features the line 'I am Iron Man.'",
+              "correctAnswer": "Iron Man",
+              "acceptableAnswers": ["iron man"],
+              "basePoints": 400,
+              "timeLimitSeconds": 20
+            },
+            {
+              "question": "This is the fictional African country in Black Panther.",
+              "correctAnswer": "Wakanda",
+              "acceptableAnswers": ["wakanda"],
+              "basePoints": 500,
+              "timeLimitSeconds": 20
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

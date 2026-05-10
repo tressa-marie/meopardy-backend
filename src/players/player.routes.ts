@@ -5,11 +5,11 @@ import { getGameByJoinCode } from "../games/game.repository.js";
 export const playerRouter = Router();
 
 playerRouter.post("/join", (req, res) => {
-  const { joinCode, name } = req.body;
+  const { joinCode, playerName } = req.body;
 
-  if (!joinCode || !name) {
+  if (!joinCode || !playerName) {
     return res.status(400).json({
-      message: "joinCode and name are required"
+      message: "joinCode and playerName are requiredddd"
     });
   }
 
@@ -21,7 +21,7 @@ playerRouter.post("/join", (req, res) => {
     });
   }
 
-  const player = createPlayer(game.id, name);
+  const player = createPlayer(game.id, playerName);
 
   return res.status(201).json(player);
 });

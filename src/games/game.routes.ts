@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { importGameSchema } from "./game.schema.js";
 import { importGame } from "./importGame.js";
-import { getGameBoard } from "./game.repository.js";
+import { getGameBoard, getGameJoinCode } from "./game.repository.js";
 
 export const gameRouter = Router();
 
@@ -31,4 +31,14 @@ gameRouter.get("/:gameId/board", (req, res) => {
   }
 
   return res.json(getGameBoard(gameId));
+});
+
+gameRouter.get("/:gameId/join", (req, res) => {
+  const gameId = Number(req.params.gameId);
+
+  if (Number.isNaN(gameId)) {
+    return res.status(400).json({ message: "Invalid game ID" });
+  }
+
+  return res.json(getGameJoinCode(gameId));
 });
