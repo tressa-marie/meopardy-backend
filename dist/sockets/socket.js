@@ -1,6 +1,21 @@
+import { adminRoom, gameRoom, playerRoom } from "./rooms.js";
 export function configureSockets(io) {
     io.on("connection", (socket) => {
         console.log("Socket connected:", socket.id);
+        socket.on("admin:joinGame", ({ gameId }) => {
+            socket.join(gameRoom(gameId));
+            socket.join(adminRoom(gameId));
+            console.log(`Socket ${socket.id} joined ${adminRoom(gameId)} via admin:joinGame`);
+        });
+        socket.on("player:joinGame", ({ gameId }) => {
+            socket.join(gameRoom(gameId));
+            socket.join(playerRoom(gameId));
+            console.log(`Socket ${socket.id} joined ${playerRoom(gameId)} via player:joinGame`);
+        });
+        socket.on("game:start", ({ gameId }) => {
+            io.to(playerRoom(gameId)).emit("game:started");
+            console.log(`Socket ${socket.id} started game ${gameId}`);
+        });
         socket.on("join-game-room", ({ gameId }) => {
             socket.join(`game:${gameId}`);
             console.log(`Socket ${socket.id} joined game:${gameId}`);

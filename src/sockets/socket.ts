@@ -1,8 +1,30 @@
 import type { Server } from "socket.io";
+import { adminRoom, gameRoom, playerRoom } from "./rooms.js";
+
+type GameIdPayload = {
+  gameId: number;
+};
 
 export function configureSockets(io: Server) {
   io.on("connection", (socket) => {
     console.log("Socket connected:", socket.id);
+
+    socket.on("admin:joinGame", ({ gameId }: GameIdPayload) => {
+      socket.join(gameRoom(gameId));
+      socket.join(adminRoom(gameId));
+      console.log(`Socket ${socket.id} joined ${adminRoom(gameId)} via admin:joinGame`);
+    });
+
+    socket.on("player:joinGame", ({ gameId }: GameIdPayload) => {
+      socket.join(gameRoom(gameId));
+      socket.join(playerRoom(gameId));
+      console.log(`Socket ${socket.id} joined ${playerRoom(gameId)} via player:joinGame`);
+    });
+
+    socket.on("game:start", ({ gameId }: GameIdPayload) => {
+      io.to(playerRoom(gameId)).emit("game:started");
+      console.log(`Socket ${socket.id} started game ${gameId}`);
+    });
 
     socket.on("join-game-room", ({ gameId }) => {
       socket.join(`game:${gameId}`);
