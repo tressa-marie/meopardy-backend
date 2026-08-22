@@ -16,6 +16,13 @@ export function configureSockets(io) {
             io.to(playerRoom(gameId)).emit("game:started");
             console.log(`Socket ${socket.id} started game ${gameId}`);
         });
+        socket.on("game:clueSelected", ({ gameId, clue }) => {
+            io.to(playerRoom(gameId)).emit("game:clueSelected", {
+                gameId,
+                clue
+            });
+            console.log(`Socket ${socket.id} selected a clue for game ${gameId}`);
+        });
         socket.on("join-game-room", ({ gameId }) => {
             socket.join(`game:${gameId}`);
             console.log(`Socket ${socket.id} joined game:${gameId}`);

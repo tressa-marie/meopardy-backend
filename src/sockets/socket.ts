@@ -5,6 +5,11 @@ type GameIdPayload = {
   gameId: number;
 };
 
+type ClueSelectedPayload = {
+  gameId: number;
+  clue: unknown;
+};
+
 export function configureSockets(io: Server) {
   io.on("connection", (socket) => {
     console.log("Socket connected:", socket.id);
@@ -24,6 +29,14 @@ export function configureSockets(io: Server) {
     socket.on("game:start", ({ gameId }: GameIdPayload) => {
       io.to(playerRoom(gameId)).emit("game:started");
       console.log(`Socket ${socket.id} started game ${gameId}`);
+    });
+
+    socket.on("game:clueSelected", ({ gameId, clue }: ClueSelectedPayload) => {
+      io.to(playerRoom(gameId)).emit("game:clueSelected", {
+        gameId,
+        clue
+      });
+      console.log(`Socket ${socket.id} selected a clue for game ${gameId}`);
     });
 
     socket.on("join-game-room", ({ gameId }) => {
