@@ -5,7 +5,7 @@ import { Server } from "socket.io";
 
 import { createSchema } from "./db/schema.js";
 import { gameRouter } from "./games/game.routes.js";
-import { answerRouter } from "./answers/answer.routes.js";
+import { createAnswerRouter } from "./answers/answer.routes.js";
 import { clueRouter } from "./clues/clue.routes.js";
 import { configureSockets } from "./sockets/socket.js";
 import { createPlayerRouter } from "./players/player.routes.js";
@@ -33,7 +33,6 @@ app.get("/api", (req, res) => {
 });
 
 app.use("/api/games", gameRouter);
-app.use("/api/answers", answerRouter);
 app.use("/api/clues", clueRouter);
 app.use("/clues", clueRouter);
 
@@ -46,6 +45,7 @@ const io = new Server(httpServer, {
 });
 
 app.use("/api/players", createPlayerRouter(io));
+app.use("/api/answers", createAnswerRouter(io));
 
 configureSockets(io);
 

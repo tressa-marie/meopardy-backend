@@ -10,6 +10,11 @@ type ClueSelectedPayload = {
   clue: unknown;
 };
 
+type AnswerSubmittedPayload = {
+  gameId: number;
+  answer: unknown;
+};
+
 export function configureSockets(io: Server) {
   io.on("connection", (socket) => {
     console.log("Socket connected:", socket.id);
@@ -32,11 +37,26 @@ export function configureSockets(io: Server) {
     });
 
     socket.on("game:clueSelected", ({ gameId, clue }: ClueSelectedPayload) => {
-      io.to(playerRoom(gameId)).emit("game:clueSelected", {
+      io.to([playerRoom(gameId), adminRoom(gameId)]).emit("game:clueSelected", {
         gameId,
         clue
       });
       console.log(`Socket ${socket.id} selected a clue for game ${gameId}`);
+    });
+
+    socket.on("game:clueClosed", ({ gameId }: GameIdPayload) => {
+      io.to([playerRoom(gameId), adminRoom(gameId)]).emit("game:clueClosed", {
+        gameId
+      });
+      console.log(`Socket ${socket.id} closed the clue for game ${gameId}`);
+    });
+
+    socket.on("game:answerSubmitted", ({ gameId, answer }: AnswerSubmittedPayload) => {
+      io.to(adminRoom(gameId)).emit("game:answerSubmitted", {
+        gameId,
+        answer
+      });
+      console.log(`Socket ${socket.id} submitted an answer for game ${gameId}`);
     });
 
     socket.on("join-game-room", ({ gameId }) => {

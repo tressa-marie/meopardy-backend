@@ -48,6 +48,91 @@ export function submitAnswer(clueId, playerId, submittedAnswer, responseTimeMs) 
     });
     return transaction();
 }
+export function overrideAnswerCorrectness(answerId, isCorrect) {
+    const row = db.prepare(`
+    SELECT
+      pa.id,
+      pa.clueId,
+      pa.playerId,
+      pa.responseTimeMs,
+      pa.isCorrect,
+      pa.pointsAwarded,
+      c.basePoints,
+      c.timeLimitSeconds,
+      r.gameId
+    FROM PlayerAnswer pa
+    JOIN Clue c ON pa.clueId = c.id
+    JOIN Category cat ON c.categoryId = cat.id
+    JOIN Round r ON cat.roundId = r.id
+    WHERE pa.id = ?
+  `).get(answerId);
+    if (!row) {
+        throw new Error("Answer not found");
+    }
+    const alreadyCorrect = row.isCorrect === 1;
+    if (alreadyCorrect === isCorrect) {
+        const player = db.prepare(`
+      SELECT score
+      FROM Player
+      WHERE id = ?
+    `).get(row.playerId);
+        return {
+            answerId: row.id,
+            gameId: row.gameId,
+            playerId: row.playerId,
+            isCorrect,
+            pointsAwarded: row.pointsAwarded,
+            pointsDelta: 0,
+            newScore: player?.score ?? 0,
+            changed: false
+        };
+    }
+    const effectiveResponseTimeMs = row.responseTimeMs ?? row.timeLimitSeconds * 1000;
+    const pointsAwarded = isCorrect
+        ? calculatePoints(row.basePoints, true, effectiveResponseTimeMs, row.timeLimitSeconds)
+        : 0;
+    const pointsDelta = pointsAwarded - row.pointsAwarded;
+    const transaction = db.transaction(() => {
+        db.prepare(`
+      UPDATE PlayerAnswer
+      SET isCorrect = ?,
+          pointsAwarded = ?
+      WHERE id = ?
+    `).run(isCorrect ? 1 : 0, pointsAwarded, row.id);
+        if (pointsDelta !== 0) {
+            db.prepare(`
+        UPDATE Player
+        SET score = score + ?
+        WHERE id = ?
+      `).run(pointsDelta, row.playerId);
+            db.prepare(`
+        INSERT INTO ScoreEvent (
+          playerId,
+          clueId,
+          pointsChanged,
+          reason
+        )
+        VALUES (?, ?, ?, ?)
+      `).run(row.playerId, row.clueId, pointsDelta, "Admin override");
+        }
+        const player = db.prepare(`
+      SELECT score
+      FROM Player
+      WHERE id = ?
+    `).get(row.playerId);
+        return {
+            answerId: row.id,
+            gameId: row.gameId,
+            playerId: row.playerId,
+            isCorrect,
+            pointsAwarded,
+            pointsDelta,
+            newScore: player?.score ?? 0,
+            changed: true
+        };
+    });
+    return transaction();
+}
 export function getAnswersForClue(clueId) {
     return db.prepare(`
     SELECT
