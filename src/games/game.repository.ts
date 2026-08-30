@@ -1,10 +1,21 @@
 import { db } from "../db/database.js";
 
+export const GAME_THEMES = ["classic", "pastel-holiday"] as const;
+
+export const DEFAULT_GAME_THEME = "classic";
+
+export type GameTheme = typeof GAME_THEMES[number];
+
+export function isGameTheme(value: unknown): value is GameTheme {
+  return GAME_THEMES.includes(value as GameTheme);
+}
+
 type GameRow = {
   id: number;
   title: string;
   joinCode: string;
   status: string;
+  theme: string;
   createdAt: string;
 };
 
@@ -59,6 +70,26 @@ export function getGameJoinCode(gameId: number) {
   }
 
   return game.joinCode;
+}
+
+export function getGameTheme(gameId: number): GameTheme {
+  const row = db.prepare<[number], { theme: string }>(`
+    SELECT theme
+    FROM Game
+    WHERE id = ?
+  `).get(gameId);
+
+  return isGameTheme(row?.theme) ? row.theme : DEFAULT_GAME_THEME;
+}
+
+export function setGameTheme(gameId: number, theme: GameTheme) {
+  const result = db.prepare(`
+    UPDATE Game
+    SET theme = ?
+    WHERE id = ?
+  `).run(theme, gameId);
+
+  return result.changes > 0;
 }
 
 export function getGameBoard(gameId: number) {

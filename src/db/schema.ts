@@ -11,6 +11,7 @@ export function createSchema() {
       title TEXT NOT NULL,
       joinCode TEXT NOT NULL UNIQUE,
       status TEXT NOT NULL DEFAULT 'setup',
+      theme TEXT NOT NULL DEFAULT 'classic',
       createdAt TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -88,6 +89,19 @@ export function createSchema() {
     db.exec(`
       ALTER TABLE Clue
       ADD COLUMN isAnswered INTEGER NOT NULL DEFAULT 0
+    `);
+  }
+
+  const gameColumns = db.prepare<[], TableInfoRow>(`
+    PRAGMA table_info(Game)
+  `).all();
+
+  const hasThemeColumn = gameColumns.some(column => column.name === "theme");
+
+  if (!hasThemeColumn) {
+    db.exec(`
+      ALTER TABLE Game
+      ADD COLUMN theme TEXT NOT NULL DEFAULT 'classic'
     `);
   }
 }

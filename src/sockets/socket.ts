@@ -1,5 +1,6 @@
 import type { Server } from "socket.io";
 import { adminRoom, gameRoom, playerRoom } from "./rooms.js";
+import { getGameTheme, isGameTheme, setGameTheme } from "../games/game.repository.js";
 
 type GameIdPayload = {
   gameId: number;
@@ -15,6 +16,11 @@ type AnswerSubmittedPayload = {
   answer: unknown;
 };
 
+type ThemeChangedPayload = {
+  gameId: number;
+  theme: unknown;
+};
+
 export function configureSockets(io: Server) {
   io.on("connection", (socket) => {
     console.log("Socket connected:", socket.id);
@@ -22,12 +28,20 @@ export function configureSockets(io: Server) {
     socket.on("admin:joinGame", ({ gameId }: GameIdPayload) => {
       socket.join(gameRoom(gameId));
       socket.join(adminRoom(gameId));
+      socket.emit("game:themeChanged", {
+        gameId,
+        theme: getGameTheme(gameId)
+      });
       console.log(`Socket ${socket.id} joined ${adminRoom(gameId)} via admin:joinGame`);
     });
 
     socket.on("player:joinGame", ({ gameId }: GameIdPayload) => {
       socket.join(gameRoom(gameId));
       socket.join(playerRoom(gameId));
+      socket.emit("game:themeChanged", {
+        gameId,
+        theme: getGameTheme(gameId)
+      });
       console.log(`Socket ${socket.id} joined ${playerRoom(gameId)} via player:joinGame`);
     });
 
@@ -42,6 +56,21 @@ export function configureSockets(io: Server) {
         clue
       });
       console.log(`Socket ${socket.id} selected a clue for game ${gameId}`);
+    });
+
+    socket.on("game:themeChanged", ({ gameId, theme }: ThemeChangedPayload) => {
+      if (!isGameTheme(theme)) {
+        console.log(`Socket ${socket.id} sent an unknown theme: ${String(theme)}`);
+        return;
+      }
+
+      setGameTheme(gameId, theme);
+
+      io.to([playerRoom(gameId), adminRoom(gameId)]).emit("game:themeChanged", {
+        gameId,
+        theme
+      });
+      console.log(`Socket ${socket.id} set game ${gameId} theme to ${theme}`);
     });
 
     socket.on("game:clueClosed", ({ gameId }: GameIdPayload) => {
