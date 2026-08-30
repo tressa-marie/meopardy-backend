@@ -14,8 +14,13 @@ createSchema();
 
 const app = express();
 
+const allowedOrigins = (process.env.CORS_ORIGIN ?? "http://localhost:4200")
+  .split(",")
+  .map(origin => origin.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: "http://localhost:4200"
+  origin: allowedOrigins
 }));
 
 app.use(express.json());
@@ -40,7 +45,7 @@ const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:4200"
+    origin: allowedOrigins
   }
 });
 
@@ -49,8 +54,9 @@ app.use("/api/answers", createAnswerRouter(io));
 
 configureSockets(io);
 
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 httpServer.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
+  console.log(`Backend running on port ${PORT}`);
+  console.log(`Allowed origins: ${allowedOrigins.join(", ")}`);
 });
