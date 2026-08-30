@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Editor / IDE
+.vs/
+
+# Local SQLite database (created at runtime by createSchema)
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+
+# Environment
+.env
+.env.*
